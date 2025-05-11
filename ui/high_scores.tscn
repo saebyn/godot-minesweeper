@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpjfqjwcjet8d"]
+
+[ext_resource type="Script" uid="uid://dn7h33di1a608" path="res://ui/high_scores.gd" id="1_kls6h"]
+[ext_resource type="Material" uid="uid://fymyq4epl6wb" path="res://materials/background_material.tres" id="2_n2o4k"]
+[ext_resource type="Theme" uid="uid://5wwgiimot5nw" path="res://theme/theme.tres" id="3_p8j76"]
+
+[node name="HighScores" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_p8j76")
+script = ExtResource("1_kls6h")
+
+[node name="Background" type="ColorRect" parent="."]
+material = ExtResource("2_n2o4k")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("3_p8j76")
+theme_override_constants/separation = 40
+
+[node name="ScoresContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

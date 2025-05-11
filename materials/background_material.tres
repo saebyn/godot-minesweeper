@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://fymyq4epl6wb"]
+
+[ext_resource type="Shader" path="res://materials/shaders/background.gdshader" id="1_ehi37"]
+
+[resource]
+shader = ExtResource("1_ehi37")
+shader_parameter/big_color = Color(0.79118, 0.768969, 0.909743, 1)
+shader_parameter/small_color = Color(0.338129, 0.608904, 0.500831, 1)
+shader_parameter/big_speed = -0.00299991
+shader_parameter/small_speed = 0.0020001
+shader_parameter/big_size = 1.015
+shader_parameter/small_size = 1.023

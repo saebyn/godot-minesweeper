@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://b73ltany0lfiq"]
+
+[ext_resource type="Script" uid="uid://b5waksogab2fq" path="res://ui/splash.gd" id="1_2ckv8"]
+[ext_resource type="Theme" uid="uid://5wwgiimot5nw" path="res://theme/theme.tres" id="2_0ctdu"]
+
+[sub_resource type="Theme" id="Theme_4rrho"]
+
+[node name="Credits" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+scale = Vector2(1.00496, 1.00945)
+theme = SubResource("Theme_4rrho")
+script = ExtResource("1_2ckv8")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="RichTextLabel" parent="CenterContainer"]
+custom_minimum_size = Vector2(483.86, 0)
+layout_mode = 2
+theme = ExtResource("2_0ctdu")
+theme_override_font_sizes/normal_font_size = 27
+text = "<placeholder>
+- made by saebyn <me@saebyn.dev>
+- background shader from https://godotshaders.com/shader/jazz-solo-cup/ (CC-BY-SA)
+- some code from https://github.com/godotengine/godot-demo-projects"
+fit_content = true
+scroll_active = false
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timeout"]

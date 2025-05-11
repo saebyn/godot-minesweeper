@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://5wwgiimot5nw"]
+
+[ext_resource type="StyleBox" uid="uid://dqkqhqtsiax0b" path="res://theme/panel_style_box_flat.tres" id="2_2wqca"]
+
+[resource]
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 3
+Panel/styles/panel = ExtResource("2_2wqca")
+PanelContainer/styles/panel = ExtResource("2_2wqca")

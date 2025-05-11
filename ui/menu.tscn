@@ -1,0 +1,123 @@
+[gd_scene load_steps=5 format=3 uid="uid://dax0hhxr4xyjj"]
+
+[ext_resource type="Script" uid="uid://s6rq0ofyeie5" path="res://ui/menu.gd" id="1_2ot4n"]
+[ext_resource type="Material" uid="uid://fymyq4epl6wb" path="res://materials/background_material.tres" id="2_2ot4n"]
+[ext_resource type="Theme" uid="uid://5wwgiimot5nw" path="res://theme/theme.tres" id="3_jbsda"]
+[ext_resource type="Script" uid="uid://d0ainskgkimnh" path="res://ui/button.gd" id="4_0bcp5"]
+
+[node name="GameMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_jbsda")
+script = ExtResource("1_2ot4n")
+
+[node name="Background" type="ColorRect" parent="."]
+material = ExtResource("2_2ot4n")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartScreen" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StartScreen"]
+layout_mode = 2
+
+[node name="GameTitleLabel" type="Label" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+theme_override_font_sizes/font_size = 30
+text = "<placeholder>"
+
+[node name="StartButton" type="Button" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+text = "New Game"
+script = ExtResource("4_0bcp5")
+tween_duration = 0.4
+tween_scale = 1.165
+
+[node name="KeybindingsButton" type="Button" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+text = "Keybindings"
+script = ExtResource("4_0bcp5")
+
+[node name="MixerButton" type="Button" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+text = "Audio"
+script = ExtResource("4_0bcp5")
+
+[node name="CreditsButton" type="Button" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+text = "Credits"
+script = ExtResource("4_0bcp5")
+
+[node name="HighScoresButton" type="Button" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+text = "High Scores"
+script = ExtResource("4_0bcp5")
+
+[node name="ExitButton" type="Button" parent="StartScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+text = "Quit"
+script = ExtResource("4_0bcp5")
+
+[node name="PauseScreen" type="CenterContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseScreen"]
+layout_mode = 2
+
+[node name="GameTitleLabel" type="Label" parent="PauseScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+theme_override_font_sizes/font_size = 30
+text = "<placeholder>"
+
+[node name="ResumeButton" type="Button" parent="PauseScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+text = "Resume"
+script = ExtResource("4_0bcp5")
+
+[node name="RestartButton" type="Button" parent="PauseScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+text = "Restart"
+script = ExtResource("4_0bcp5")
+
+[node name="ExitButton" type="Button" parent="PauseScreen/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_jbsda")
+text = "End Game"
+script = ExtResource("4_0bcp5")
+
+[connection signal="pressed" from="StartScreen/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="StartScreen/VBoxContainer/KeybindingsButton" to="." method="_on_keybindings_button_pressed"]
+[connection signal="pressed" from="StartScreen/VBoxContainer/MixerButton" to="." method="_on_mixer_button_pressed"]
+[connection signal="pressed" from="StartScreen/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="StartScreen/VBoxContainer/HighScoresButton" to="." method="_on_high_scores_button_pressed"]
+[connection signal="pressed" from="StartScreen/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="PauseScreen/VBoxContainer/ResumeButton" to="." method="unpause"]
+[connection signal="pressed" from="PauseScreen/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="PauseScreen/VBoxContainer/ExitButton" to="." method="_on_return_main_menu_button_pressed"]
