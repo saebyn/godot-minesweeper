@@ -13,3 +13,8 @@ class Score extends Resource:
     self.initials = initials_
 
 @export var high_scores: Array[Score] = []
+
+
+func reset_game() -> void:
+  # Reset game state
+  pass

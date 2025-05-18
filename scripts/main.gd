@@ -8,7 +8,7 @@ func _ready() -> void:
   GameManager.game_over.connect(_on_game_manager_game_over)
 
 
-func _on_game_manager_game_over(player_won: bool) -> void:
+func _on_game_manager_game_over(_player_won: bool) -> void:
   # Pause the game when game over occurs
   get_tree().paused = true
   # Load the game over screen
