@@ -1,8 +1,57 @@
-[gd_scene load_steps=2 format=3 uid="uid://cc2n5bb6al7qg"]
+[gd_scene load_steps=3 format=3 uid="uid://cc2n5bb6al7qg"]
 
 [ext_resource type="Script" uid="uid://cjxxmwiwdfcbw" path="res://scripts/game.gd" id="1_yqjtg"]
+[ext_resource type="TileSet" uid="uid://c56im5fvn8x2w" path="res://assets/textures/tileset.tres" id="2_yqjtg"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_yqjtg")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_yqjtg")
+
+[node name="HUD" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(1152, 0)
+
+[node name="MenuButton" type="MenuButton" parent="HUD"]
+layout_mode = 2
+toggle_mode = false
+text = "Map Size"
+item_count = 3
+popup/item_0/text = "Small (9x9)"
+popup/item_0/checked = true
+popup/item_0/id = 0
+popup/item_1/text = "Medium (16x16)"
+popup/item_1/id = 1
+popup/item_2/text = "Large (30x16)"
+popup/item_2/id = 2
+
+[node name="VSeparator" type="VSeparator" parent="HUD"]
+layout_mode = 2
+
+[node name="MineCountLabel" type="Label" parent="HUD"]
+layout_mode = 2
+text = "Mines left: "
+
+[node name="MineCount" type="Label" parent="HUD"]
+layout_mode = 2
+text = "0"
+
+[node name="GameOverPanel" type="PanelContainer" parent="."]
+visible = false
+offset_left = 455.0
+offset_top = 248.0
+offset_right = 755.0
+offset_bottom = 348.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GameOverPanel/VBoxContainer"]
+layout_mode = 2
+text = "Game Over!"
+
+[node name="Button" type="Button" parent="GameOverPanel/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="GameOverPanel/VBoxContainer/Button" to="." method="on_game_over_panel_exit_pressed"]

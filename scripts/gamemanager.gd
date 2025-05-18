@@ -3,6 +3,7 @@ extends Node
 var scores_path: String = "user://high_scores.cfg"
 
 signal game_over(player_won: bool)
+signal game_started()
 
 class Score extends Resource:
   var score: int
@@ -16,5 +17,4 @@ class Score extends Resource:
 
 
 func reset_game() -> void:
-  # Reset game state
-  pass
+  game_started.emit()
