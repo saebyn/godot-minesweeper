@@ -50,8 +50,13 @@ layout_mode = 2
 layout_mode = 2
 text = "Game Over!"
 
-[node name="Button" type="Button" parent="GameOverPanel/VBoxContainer"]
+[node name="ExitButton" type="Button" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2
 text = "Exit"
 
-[connection signal="pressed" from="GameOverPanel/VBoxContainer/Button" to="." method="on_game_over_panel_exit_pressed"]
+[node name="RestartButton" type="Button" parent="GameOverPanel/VBoxContainer"]
+layout_mode = 2
+text = "Restart"
+
+[connection signal="pressed" from="GameOverPanel/VBoxContainer/ExitButton" to="." method="on_game_over_panel_exit_pressed"]
+[connection signal="pressed" from="GameOverPanel/VBoxContainer/RestartButton" to="." method="on_game_over_panel_restart_pressed"]

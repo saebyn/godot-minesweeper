@@ -137,7 +137,7 @@ func update_hud() -> void:
 
 func update_tilemap() -> void:
   # Update the TileMap with the mine positions
-  # TODO use a tile that indicates the number of adjacent mines
+  map.clear()
   for x in range(map_size.x):
     for y in range(map_size.y):
       match [MINES[x][y], REVEALED_TILES[x][y]]:
@@ -202,6 +202,11 @@ func reveal_all_tiles() -> void:
 
 func on_game_over_panel_exit_pressed() -> void:
   GameManager.game_over.emit(false)
+
+
+func on_game_over_panel_restart_pressed() -> void:
+  GameManager.reset_game()
+  game_over_panel.visible = false
 
 
 func count_adjacent_mines(tile_pos: Vector2i) -> int:

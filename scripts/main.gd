@@ -67,5 +67,5 @@ func _on_game_menu_start_game() -> void:
 
 func _on_game_menu_restart_game() -> void:
   print("Restarting game")
-  GameManager.restart_level()
+  GameManager.reset_game()
   resume_game()
