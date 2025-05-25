@@ -4,16 +4,6 @@ extends Node2D
 @onready var game_scene := $GameScene
 @onready var music_player := $MusicAudioStreamPlayer
 
-func _ready() -> void:
-  GameManager.game_over.connect(_on_game_manager_game_over)
-
-
-func _on_game_manager_game_over(_player_won: bool) -> void:
-  # Pause the game when game over occurs
-  get_tree().paused = true
-  # Load the game over screen
-  game_menu.show()
-  game_scene.hide()
 
 func _input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):

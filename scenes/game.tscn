@@ -35,28 +35,3 @@ text = "Mines left: "
 [node name="MineCount" type="Label" parent="HUD"]
 layout_mode = 2
 text = "0"
-
-[node name="GameOverPanel" type="PanelContainer" parent="."]
-visible = false
-offset_left = 455.0
-offset_top = 248.0
-offset_right = 755.0
-offset_bottom = 348.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameOverPanel"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GameOverPanel/VBoxContainer"]
-layout_mode = 2
-text = "Game Over!"
-
-[node name="ExitButton" type="Button" parent="GameOverPanel/VBoxContainer"]
-layout_mode = 2
-text = "Exit"
-
-[node name="RestartButton" type="Button" parent="GameOverPanel/VBoxContainer"]
-layout_mode = 2
-text = "Restart"
-
-[connection signal="pressed" from="GameOverPanel/VBoxContainer/ExitButton" to="." method="on_game_over_panel_exit_pressed"]
-[connection signal="pressed" from="GameOverPanel/VBoxContainer/RestartButton" to="." method="on_game_over_panel_restart_pressed"]

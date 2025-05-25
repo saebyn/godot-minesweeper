@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://btao707dkr108"]
+
+[ext_resource type="Script" uid="uid://chbirc6x6q5e5" path="res://scripts/game_over.gd" id="1_xeevv"]
+
+[node name="GameOverPanel" type="PanelContainer"]
+offset_left = 455.0
+offset_top = 248.0
+offset_right = 755.0
+offset_bottom = 348.0
+script = ExtResource("1_xeevv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Game Over!"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="RestartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Restart"
+
+[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_game_over_panel_exit_game"]
+[connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="_on_game_over_panel_restart_game"]

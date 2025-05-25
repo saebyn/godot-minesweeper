@@ -27,7 +27,6 @@ var player_hit_mine: bool
 @onready var map: TileMapLayer = $TileMapLayer
 @onready var mines_remaining_label: Label = $HUD/MineCount
 @onready var map_size_menu: MenuButton = $HUD/MenuButton
-@onready var game_over_panel: Control = $GameOverPanel
 
 # enum of reveal states
 enum RevealState {
@@ -57,7 +56,6 @@ func reset_game() -> void:
   MINES = create_multidimensional_array(map_size, false)
   REVEALED_TILES = create_multidimensional_array(map_size, RevealState.UNREVEALED)
   update_tilemap()
-  game_over_panel.visible = false
 
 func on_map_size_menu_id_pressed(id: int) -> void:
   # Change the map size based on the selected menu item
@@ -192,21 +190,13 @@ func toggle_tile_flag(tile_pos: Vector2i) -> void:
 func game_over() -> void:
   reveal_all_tiles()
   update_tilemap()
-  game_over_panel.visible = true
+  GameManager.game_over.emit(not player_hit_mine)
 
 func reveal_all_tiles() -> void:
   # Reveal all tiles on the map
   for x in range(map_size.x):
     for y in range(map_size.y):
       REVEALED_TILES[x][y] = RevealState.REVEALED
-
-func on_game_over_panel_exit_pressed() -> void:
-  GameManager.game_over.emit(false)
-
-
-func on_game_over_panel_restart_pressed() -> void:
-  GameManager.reset_game()
-  game_over_panel.visible = false
 
 
 func count_adjacent_mines(tile_pos: Vector2i) -> int:
