@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bciot1ry4tq7j"
+path="res://.godot/imported/Beats ABCD.ogg-01a5651c9dd6f1d072c9ec613d1e67ef.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/Beats ABCD.ogg"
+dest_files=["res://.godot/imported/Beats ABCD.ogg-01a5651c9dd6f1d072c9ec613d1e67ef.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

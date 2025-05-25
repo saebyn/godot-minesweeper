@@ -1,10 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cc2n5bb6al7qg"]
+[gd_scene load_steps=7 format=3 uid="uid://cc2n5bb6al7qg"]
 
 [ext_resource type="Script" uid="uid://cjxxmwiwdfcbw" path="res://scripts/game.gd" id="1_yqjtg"]
+[ext_resource type="AudioStream" uid="uid://7s00lo8porc6" path="res://assets/sounds/sfx_sounds_button1.wav" id="2_p57ef"]
 [ext_resource type="TileSet" uid="uid://c56im5fvn8x2w" path="res://assets/textures/tileset.tres" id="2_yqjtg"]
+[ext_resource type="AudioStream" uid="uid://em4rdbnrihxa" path="res://assets/sounds/sfx_sounds_impact1.wav" id="3_u5sy4"]
+[ext_resource type="AudioStream" uid="uid://c0xc6qiauuop4" path="res://assets/sounds/explosion.wav" id="4_gee14"]
+[ext_resource type="AudioStream" uid="uid://bi1nohdxk2pk1" path="res://assets/sounds/sfx_sounds_powerup18.wav" id="5_0tnpc"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_yqjtg")
+reveal_sound = ExtResource("2_p57ef")
+flag_sound = ExtResource("3_u5sy4")
+explode_sound = ExtResource("4_gee14")
+win_sound = ExtResource("5_0tnpc")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_set = ExtResource("2_yqjtg")
@@ -35,3 +43,6 @@ text = "Mines left: "
 [node name="MineCount" type="Label" parent="HUD"]
 layout_mode = 2
 text = "0"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+bus = &"Effects"

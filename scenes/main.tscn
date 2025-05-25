@@ -18,6 +18,7 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="MusicAudioStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+bus = &"Music"
 
 [node name="GameOverPanel" parent="." instance=ExtResource("4_jyhfs")]
 

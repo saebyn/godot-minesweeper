@@ -1,5 +1,12 @@
 extends Node2D
 
+@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+
+@export var reveal_sound: AudioStream
+@export var flag_sound: AudioStream
+@export var explode_sound: AudioStream
+@export var win_sound: AudioStream
+
 # Size of the game map in tiles
 @export var map_size := Vector2i(9, 9)
 
@@ -17,16 +24,50 @@ extends Node2D
   Vector2i(3, 2) # 8 mines adjacent
 ]
 @export var flag_tile := Vector2i(3, 0)
+@export var exploding_mine_tile := Vector2i(0, 3)
 
 @export var mine_percent := 0.2
 
 var mine_count: int = 0
 var flag_count: int = 0
 var player_hit_mine: bool
+var player_hit_mine_location: Vector2i
 
 @onready var map: TileMapLayer = $TileMapLayer
 @onready var mines_remaining_label: Label = $HUD/MineCount
 @onready var map_size_menu: MenuButton = $HUD/MenuButton
+
+
+class AdjacentTileIterator:
+  # An iterator to iterate over adjacent tiles
+  var tile_pos: Vector2i
+  var map_size: Vector2i
+  var tiles: Array[Vector2i] = []
+  var current_index: int = 0
+
+  func _init(tile_pos_: Vector2i, map_size_: Vector2i) -> void:
+    self.tile_pos = tile_pos_
+    self.map_size = map_size_
+
+    for dx in [-1, 0, 1]:
+      for dy in [-1, 0, 1]:
+        if dx == 0 and dy == 0:
+          continue
+        var adj_pos = tile_pos + Vector2i(dx, dy)
+        if adj_pos.x >= 0 and adj_pos.x < map_size.x and adj_pos.y >= 0 and adj_pos.y < map_size.y:
+          tiles.append(adj_pos)
+
+  func _iter_init(_arg) -> bool:
+    current_index = 0
+    return tiles.size() > 0
+
+  func _iter_next(_arg) -> bool:
+    current_index += 1
+    return current_index < tiles.size()
+
+  func _iter_get(_arg) -> Vector2i:
+    return tiles[current_index]
+
 
 # enum of reveal states
 enum RevealState {
@@ -152,17 +193,21 @@ func update_tilemap() -> void:
         [false, RevealState.FLAGGED]:
           map.set_cell(Vector2i(x, y), 0, flag_tile)
 
+  if player_hit_mine:
+    # If the player hit a mine, reveal the mine location
+    map.set_cell(player_hit_mine_location, 0, exploding_mine_tile)
 
-func reveal_tile(tile_pos: Vector2i) -> void:
+
+func reveal_tile(tile_pos: Vector2i) -> bool:
   # Reveal the tile at the specified position
   if REVEALED_TILES[tile_pos.x][tile_pos.y] != RevealState.UNREVEALED:
-    return
+    return false
 
   # If the tile is a mine, reveal it and end the game
   if MINES[tile_pos.x][tile_pos.y]:
     player_hit_mine = true
-    game_over()
-    return
+    player_hit_mine_location = tile_pos
+    return false
 
   # Mark the tile as revealed
   REVEALED_TILES[tile_pos.x][tile_pos.y] = RevealState.REVEALED
@@ -172,6 +217,9 @@ func reveal_tile(tile_pos: Vector2i) -> void:
   var adjacent_mines := count_adjacent_mines(tile_pos)
   if adjacent_mines == 0:
     reveal_adjacent_tiles(tile_pos)
+
+  # We have successfully revealed a tile
+  return true
 
 func toggle_tile_flag(tile_pos: Vector2i) -> void:
   # Toggle the flag state of the tile at the specified position
@@ -184,10 +232,27 @@ func toggle_tile_flag(tile_pos: Vector2i) -> void:
 
   update_hud()
 
-  update_tilemap()
+
+# Reveal all unflagged adjacent tiles when right-clicking on a revealed tile
+# This should only be allowed if the number of flags matches the number of adjacent mines
+func reveal_unflagged_adjacent_tiles(tile_pos: Vector2i) -> void:
+  assert(REVEALED_TILES[tile_pos.x][tile_pos.y] == RevealState.REVEALED)
+
+  var adjacent_mines := count_adjacent_mines(tile_pos)
+  var adjacent_flags := count_adjacent_flags(tile_pos)
+
+  # Only reveal adjacent tiles if the number of flags matches the number of adjacent mines
+  if adjacent_mines == adjacent_flags:
+    reveal_adjacent_tiles(tile_pos)
 
 
 func game_over() -> void:
+  if player_hit_mine:
+    audio_player.stream = explode_sound
+  else:
+    audio_player.stream = win_sound
+  
+  audio_player.play()
   reveal_all_tiles()
   update_tilemap()
   GameManager.game_over.emit(not player_hit_mine)
@@ -202,28 +267,28 @@ func reveal_all_tiles() -> void:
 func count_adjacent_mines(tile_pos: Vector2i) -> int:
   # Count the number of mines adjacent to the specified tile
   var count := 0
-  for dx in [-1, 0, 1]:
-    for dy in [-1, 0, 1]:
-      if dx == 0 and dy == 0:
-        continue
-      var adj_pos = tile_pos + Vector2i(dx, dy)
-      if adj_pos.x < 0 or adj_pos.x >= map_size.x or adj_pos.y < 0 or adj_pos.y >= map_size.y:
-        continue
+  var iterator := AdjacentTileIterator.new(tile_pos, map_size)
+  for adj_pos in iterator:
       if MINES[adj_pos.x][adj_pos.y]:
         count += 1
   return count
 
+func count_adjacent_flags(tile_pos: Vector2i) -> int:
+  # Count the number of flags adjacent to the specified tile
+  var count := 0
+  var iterator := AdjacentTileIterator.new(tile_pos, map_size)
+  for adj_pos in iterator:
+    if REVEALED_TILES[adj_pos.x][adj_pos.y] == RevealState.FLAGGED:
+      count += 1
+
+  return count
+
 func reveal_adjacent_tiles(tile_pos: Vector2i) -> void:
   # Recursively reveal adjacent tiles if they are not mines
-  for dx in [-1, 0, 1]:
-    for dy in [-1, 0, 1]:
-      if dx == 0 and dy == 0:
-        continue
-      var adj_pos = tile_pos + Vector2i(dx, dy)
-      if adj_pos.x < 0 or adj_pos.x >= map_size.x or adj_pos.y < 0 or adj_pos.y >= map_size.y:
-        continue
-      if REVEALED_TILES[adj_pos.x][adj_pos.y] == RevealState.UNREVEALED:
-        reveal_tile(adj_pos)
+  var iterator := AdjacentTileIterator.new(tile_pos, map_size)
+  for adj_pos in iterator:
+    if REVEALED_TILES[adj_pos.x][adj_pos.y] == RevealState.UNREVEALED:
+      reveal_tile(adj_pos)
 
 func _unhandled_input(event: InputEvent) -> void:
   # Handle input events
@@ -243,6 +308,21 @@ func _unhandled_input(event: InputEvent) -> void:
       # Right click to flag the tile
       handle_right_click(tile_pos)
 
+    # Check if the game is over
+    if player_hit_mine:
+      game_over()
+    elif check_win_condition():
+      game_over()
+
+
+func check_win_condition() -> bool:
+  # Check if all non-mine tiles are revealed
+  for x in range(map_size.x):
+    for y in range(map_size.y):
+      if not MINES[x][y] and REVEALED_TILES[x][y] != RevealState.REVEALED:
+        return false
+  return true
+
 func handle_left_click(tile_pos: Vector2i) -> void:
   # If the game has not started, place mines and reveal the first tile
   if not started:
@@ -250,11 +330,21 @@ func handle_left_click(tile_pos: Vector2i) -> void:
     started = true
 
   # Reveal the clicked tile
-  reveal_tile(tile_pos)
+  if reveal_tile(tile_pos):
+    audio_player.stream = reveal_sound
+    audio_player.play()
 
 func handle_right_click(tile_pos: Vector2i) -> void:
   # Don't do anything if the game has not started
   if not started:
     return
   
-  toggle_tile_flag(tile_pos)
+  if REVEALED_TILES[tile_pos.x][tile_pos.y] == RevealState.REVEALED:
+    reveal_unflagged_adjacent_tiles(tile_pos)
+  else:
+    toggle_tile_flag(tile_pos)
+
+  audio_player.stream = flag_sound
+  audio_player.play()
+  
+  update_tilemap()
